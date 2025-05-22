@@ -2,13 +2,12 @@
 
 namespace Database\Factories;
 
-use App\Enums\TipoCliente;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Clientes>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Corretores>
  */
-class ClientesFactory extends Factory
+class CorretoresFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -20,12 +19,8 @@ class ClientesFactory extends Factory
         return [
             'nome' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
+            'creci' => $this->faker->randomNumber(6, true),
             'telefone' => $this->faker->phoneNumber(),
-            'tipo' => $this->faker->randomElement([
-                TipoCliente::Inquilino->value,
-                TipoCliente::Interessado->value,
-                TipoCliente::Proprietario->value,
-            ]),
         ];
     }
 }

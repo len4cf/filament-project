@@ -2,16 +2,16 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\TipoCliente;
 use App\Filament\Resources\ClientesResource\Pages;
 use App\Filament\Resources\ClientesResource\RelationManagers;
 use App\Models\Clientes;
+use Faker\Provider\PhoneNumber;
+use Filament\Actions\ActionGroup;
 use Filament\Forms;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -20,31 +20,25 @@ class ClientesResource extends Resource
 {
     protected static ?string $model = Clientes::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('nome')
-                ->required()
-                ->maxLength(255)
-                ->placeholder('Nome'),
-                TextInput::make('email')
-                ->required()
-                ->maxLength(255)
-                ->placeholder('Email'),
-                TextInput::make('cpf')
-                ->required(),
-                TextInput::make('telefone')
-                ->required()
-                ->maxLength(255)
-                ->placeholder('Telefone'),
-                Select::make('tipo')
-                ->options([
-                    'proprietario' => 'proprietario',
-                    'interessado' => 'interessado',
-                    'inquilino' => 'inquilino',
+                Forms\Components\Section::make('')
+                    ->columns(2)
+                ->schema([
+                    Forms\Components\TextInput::make('nome')
+                    ->required(),
+                    Forms\Components\TextInput::make('email')
+                    ->required(),
+                    \Leandrocfe\FilamentPtbrFormFields\PhoneNumber::make('telefone')
+                        ->mask('(99) 99999-9999')
+                    ->required(),
+                    Forms\Components\Select::make('tipo')
+                    ->options(TipoCliente::class)
+                    ->enum(TipoCliente::class)
                 ]),
             ]);
     }
@@ -52,23 +46,34 @@ class ClientesResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->groups([
+                Tables\Grouping\Group::make('tipo')
+                ->label('Tipo')
+                ->collapsible(),
+            ])
             ->columns([
-                TextColumn::make('nome'),
-                TextColumn::make('email'),
-                TextColumn::make('cpf'),
-                TextColumn::make('telefone'),
-                Select::make('tipo')
-                ->options([
-                    'proprietario' => 'proprietario',
-                    'interessado' => 'interessado',
-                    'inquilino' => 'inquilino',
-                ]),
+                Tables\Columns\TextColumn::make('nome')
+                ->searchable(),
+                Tables\Columns\TextColumn::make('email'),
+                Tables\Columns\TextColumn::make('telefone'),
+                Tables\Columns\TextColumn::make('tipo')
+                ->badge(),
+
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('tipo')
+                ->options(TipoCliente::class)
+                ->preload()
+                ->multiple()
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make()
+                    ->color('secondary'),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make()
+                    ->requiresConfirmation()
+                ])->tooltip('Opções')
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -88,8 +93,8 @@ class ClientesResource extends Resource
     {
         return [
             'index' => Pages\ListClientes::route('/'),
-            'create' => Pages\CreateClientes::route('/create'),
-            'edit' => Pages\EditClientes::route('/{record}/edit'),
+//            'create' => Pages\CreateClientes::route('/create'),
+//            'edit' => Pages\EditClientes::route('/{record}/edit'),
         ];
     }
 }

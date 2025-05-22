@@ -23,6 +23,11 @@ class User extends Authenticatable
         'password',
     ];
 
+    public function imoveis()
+    {
+        return $this->hasMany(Imoveis::class, 'proprietario_id');
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *
