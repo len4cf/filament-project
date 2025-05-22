@@ -15,6 +15,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\ViewRecord;
+use Filament\Tables\Actions\EditAction;
 use Leandrocfe\FilamentPtbrFormFields\Cep;
 use Leandrocfe\FilamentPtbrFormFields\Money;
 
@@ -22,6 +23,15 @@ class ViewImoveis extends ViewRecord
 {
     protected static string $resource = ImoveisResource::class;
 
+    protected function getHeaderActions(): array
+    {
+        return [
+            Actions\Action::make('editar')
+                ->label('Editar')
+                ->icon('heroicon-o-pencil')
+                ->url(fn () => static::getResource()::getUrl('edit', ['record' => $this->record->getKey()])),
+        ];
+    }
     public function form(Form $form): Form
     {
         return $form

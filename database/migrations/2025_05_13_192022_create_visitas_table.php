@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('cliente_id')->constrained('clientes');
             $table->foreignId('corretor_id')->constrained('corretores');
             $table->timestamp('data_hora');
-            $table->enum('status', ['agendada', 'realizada', 'cancelada']);
+            $table->string('status');
             $table->text('observacoes')->nullable();
             $table->timestamps();
         });

@@ -5,6 +5,7 @@ namespace App\Filament\Resources\ImoveisResource\RelationManagers;
 use App\Filament\Resources\ImoveisResource\Pages\ImovelFotosGallery;
 use App\Models\ImovelFotos;
 use Filament\Actions\Action;
+use Filament\Actions\EditAction;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\ImageEntry;
@@ -33,6 +34,7 @@ class FotosRelationManager extends RelationManager
                 ->directory('imoveis/fotos')
                 ->disk('public')
                 ->imagePreviewHeight('200')
+                ->rules(['required', 'image', 'dimensions:max_width=700'])
                 ->required(),
         ]);
     }
@@ -41,10 +43,9 @@ class FotosRelationManager extends RelationManager
     {
         return $infolist->schema([
             InfoListSection::make([
-
                 ImageEntry::make('caminho')
-                ->label('Foto')
-                ->size('lg')
+                    ->hiddenLabel()
+                    ->size('lg')
 
             ])
         ]);
@@ -71,7 +72,9 @@ class FotosRelationManager extends RelationManager
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                Tables\Actions\ViewAction::make()
+                ->modalHeading('Visualizar foto do imóvel')
+                ->modalIcon('heroicon-o-photo'),
                 Tables\Actions\DeleteAction::make(),
             ]);
     }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\StatusVisita;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,6 +20,10 @@ class Visitas extends Model
         'data_hora',
         'status',
         'observacoes'
+    ];
+
+    protected $casts = [
+        'status' => StatusVisita::class,
     ];
 
     public function imovel()

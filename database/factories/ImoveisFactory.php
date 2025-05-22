@@ -37,7 +37,7 @@ class ImoveisFactory extends Factory
                 StatusImoveis::ALUGUEL->value,
                 StatusImoveis::VENDIDO->value,
             ]),
-            'cliente_id' => 1,
+            'proprietario_id' => 1,
             'corretor_id' => 1,
             'inquilino_id' => 2,
         ];

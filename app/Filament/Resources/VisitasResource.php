@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\StatusVisita;
 use App\Filament\Resources\VisitasResource\Pages;
 use App\Filament\Resources\VisitasResource\RelationManagers;
 use App\Models\Clientes;
@@ -65,11 +66,7 @@ class VisitasResource extends Resource
                         ->required(),
                     Forms\Components\Select::make('status')
                         ->label('Status')
-                        ->options([
-                            'agendada' => 'Agendada',
-                            'realizada' => 'Realizada',
-                            'cancelada' => 'Cancelada',
-                        ])
+                        ->options(StatusVisita::class)
                         ->required(),
                     Forms\Components\Textarea::make('observacoes')
                         ->label('Observações')
@@ -91,7 +88,6 @@ class VisitasResource extends Resource
                 ->label("Corretor Responsavel"),
                 TextColumn::make('data_hora'),
                 TextColumn::make('status'),
-                TextColumn::make('observacoes'),
             ])
             ->filters([
                 //
